@@ -1,10 +1,21 @@
 const mieImg = ["arrabbiato.png", "bello.png", "piangere.png", "ridere.png", "amare.png", "amare1.png", "spavento.png", "shock.png", "arrabbiato.png", "bello.png",
     "piangere.png", "ridere.png", "amare.png", "amare1.png", "spavento.png", "shock.png"
 ];
+let clicks = 0;
+let iconFind = 0;
+
+function conta() {
+    clicks++;
+    $('span').text(clicks);
+}
 
 $(() => {
 
     //shuffle poi dal risultato dello shuffle faccio partire l'each()
+
+    shuffle(mieImg);
+
+    let arrayComparison = [];
 
 
     $('<div id="tavolo-gioco"></div>').css({
@@ -17,37 +28,73 @@ $(() => {
 
     for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
-            $('<div class="casella"></div>').css({
-                width: '190px',
-                height: '190px',
-                border: '1px solid black',
+            $('<div class="images"></div>').css({
+                width: '180px',
+                height: '180px',
                 marginLeft: '8px'
             }).appendTo('#tavolo-gioco');
         }
     }
+    $('<img src="" class="img">').appendTo('.images');
 
-    $('<img src="" class="imag">').appendTo('.casella');
-
-    $('.imag').each(function() {
+    $('img').each(function() {
         var img = mieImg.pop();
-        $(this).attr('src', 'img/' + img);
-        console.log(this);
+        $(this).attr('src', 'img/' + img).css({
+            width: '180px',
+        });
+        console.log(img);
+        $(this).parent().click(function(event) {
+            let selezione = event.currentTarget;
+            arrayComparison.push(selezione);
+            $(selezione).children().css({
+                display: 'block'
+            });
+            conta();
+            console.log(clicks);
+            var len = arrayComparison.length;
+            if (len === 2) {
+                if (arrayComparison[0].innerHTML === arrayComparison[1].innerHTML) {
+                    $(arrayComparison[0]).children().addClass('disable');
+                    $(arrayComparison[1]).children().addClass('disable');
+                    arrayComparison = [];
+                    iconFind++;
+                    console.log(iconFind);
+                } else if (arrayComparison[0].innerHTML !== arrayComparison[1].innerHTML) {
+                    setTimeout(function() {
+                        $(arrayComparison[0]).children().css({
+                            display: 'none'
+                        });
+                        $(arrayComparison[1]).children().css({
+                            display: 'none'
+                        });
+
+                        arrayComparison = [];
+                    }, 500);
+                }
+            }
+        });
     });
+    $('<button id="Restart" class="restart">Ricomincia</button>').appendTo('.box');
+    $('button').on('click', function() {
+        location.reload();
 
+    });
 });
-// usare toggleClass per aggiungere e togliere la classe .image al click
 
-// quando il documento è pronto...vado a selezionare casualmente una immagine dalla cartella.
 
-// creo una variabile "images" che contiene il selettore della classe "images". 
-// così ho un oggetto jQuery e metto gli elementi corrispondenti nell'oggetto jQuery.
+function shuffle(a) {
+    var currentIndex = a.length;
+    var temporaryValue, randomIndex;
 
-// creo un ciclo for sull'oggetto creato per ottenere poi un'immagine random.
-
-// prendo a caso un elemento dalla mia lista.
-
-// vado a prendere il file localizzato nella directory img e creo il tag html e lo inserisco nella pagina.
-//images.eq(e).html("<img id='" + e + "' src='images/" + randomImg + ".png' width='130' height='130' />");
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = a[currentIndex];
+        a[currentIndex] = a[randomIndex];
+        a[randomIndex] = temporaryValue;
+    }
+    return a;
+}
 
 // creo la funzione principale "mostraImg"
 

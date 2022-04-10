@@ -29,16 +29,21 @@ h2 {
 }
 
 .images {
-    background: rgba(0, 218, 219, 1);
-    width: 140px;
-    height: 140px;
+    background: rgba(0, 218, 219);
+    width: 190px;
+    height: 190px;
     margin: 5px;
     cursor: pointer;
     display: inline-block;
     border-radius: 10px;
 }
 
-.images img {
+.disabled {
+    pointer-events: none;
+    cursor: wait;
+}
+
+.img {
     padding: 5px;
     display: none;
 }
